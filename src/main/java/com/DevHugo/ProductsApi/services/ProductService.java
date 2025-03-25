@@ -40,4 +40,19 @@ public class ProductService {
 		return new ProductDTO(entity);
 	}
 	
+	@Transactional
+	public ProductDTO update(ProductDTO dto, Long id) {
+		
+		Product entity = repo.getReferenceById(id);
+		entity.setName(dto.getName());
+		entity.setPrice(dto.getPrice());
+		entity.setQuantity(dto.getQuantity());
+		entity = repo.save(entity);
+		return new ProductDTO(entity);
+	}
+	
+	@Transactional
+	public void delete(Long id) {
+		repo.deleteById(id);
+	}
 }
