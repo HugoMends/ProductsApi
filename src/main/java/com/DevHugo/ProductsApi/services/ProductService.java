@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.DevHugo.ProductsApi.dto.ProductDTO;
 import com.DevHugo.ProductsApi.entity.Product;
 import com.DevHugo.ProductsApi.repositories.ProductsRepository;
+import com.DevHugo.ProductsApi.services.exceptions.ResourceNotFoundException;
 
 
 
@@ -23,6 +24,20 @@ public class ProductService {
 		Page<Product> result = repo.findAll(pageable);
 		return result.map(product ->(new ProductDTO(product)));
 	}
+	@Transactional(readOnly = true)
+	public ProductDTO findById(Long id) {
+		Product prod = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
+		return new ProductDTO(prod);
+	}
 	
+	@Transactional
+	public ProductDTO insert(ProductDTO dto) {
+		Product entity = new Product();
+		entity.setName(dto.getName());
+		entity.setPrice(dto.getPrice());
+		entity.setQuantity(dto.getQuantity());
+		entity = repo.save(entity);
+		return new ProductDTO(entity);
+	}
 	
 }
