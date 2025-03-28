@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.DevHugo.ProductsApi.dto.ProductCategoryDTO;
 import com.DevHugo.ProductsApi.dto.ProductDTO;
 import com.DevHugo.ProductsApi.services.ProductService;
 
@@ -45,6 +46,14 @@ public class ProductController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
 		return ResponseEntity.created(uri).body(dto);
 	}
+	
+	//@PostMapping
+	public ResponseEntity<ProductCategoryDTO> insert(@RequestBody ProductCategoryDTO dto){
+		dto = service.insert(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+		return ResponseEntity.created(uri).body(dto);
+	}
+	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto){
 		dto = service.update(dto, id);

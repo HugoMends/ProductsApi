@@ -1,7 +1,10 @@
 package com.DevHugo.ProductsApi.dto;
 
+import com.DevHugo.ProductsApi.entity.Categories;
 import com.DevHugo.ProductsApi.entity.Product;
 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -18,15 +21,18 @@ public class ProductDTO {
 	
 	@NotBlank
 	private Integer quantity;
+	
+	private Long categoryId;
 
 	public ProductDTO() {
 	}
 
-	public ProductDTO(Long id,String name,Double price, Integer quantity) {
+	public ProductDTO(Long id,String name,Double price, Integer quantity, Long categoryId) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.quantity = quantity;
+		this.categoryId = categoryId;
 	}
 	
 	public ProductDTO(Product product) {
@@ -34,6 +40,7 @@ public class ProductDTO {
 		name = product.getName();
 		price = product.getPrice();
 		quantity = product.getQuantity();
+		this.categoryId = product.getCategory().getId();
 	}
 
 	public Long getId() {
@@ -51,6 +58,13 @@ public class ProductDTO {
 	public Integer getQuantity() {
 		return quantity;
 	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+
+	
 	
 	
 	

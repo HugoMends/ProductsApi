@@ -6,8 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.DevHugo.ProductsApi.dto.ProductCategoryDTO;
 import com.DevHugo.ProductsApi.dto.ProductDTO;
+import com.DevHugo.ProductsApi.entity.Categories;
 import com.DevHugo.ProductsApi.entity.Product;
+import com.DevHugo.ProductsApi.repositories.CategoriesRepository;
 import com.DevHugo.ProductsApi.repositories.ProductsRepository;
 import com.DevHugo.ProductsApi.services.exceptions.ResourceNotFoundException;
 
@@ -18,6 +21,8 @@ public class ProductService {
 
 	@Autowired
 	private ProductsRepository repo;
+	@Autowired
+	private CategoriesRepository catrepo;
 
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAll(Pageable pageable) {
@@ -37,8 +42,22 @@ public class ProductService {
 		entity.setName(dto.getName());
 		entity.setPrice(dto.getPrice());
 		entity.setQuantity(dto.getQuantity());
+		Categories cat = catrepo.getReferenceById(dto.getCategoryId());
+		entity.setCategory(cat);
 		entity = repo.save(entity);
 		return new ProductDTO(entity);
+	}
+	@Transactional
+	public ProductCategoryDTO insert(ProductCategoryDTO dto) {
+		Product entity = new Product();
+		entity.setName(dto.getName());
+		entity.setPrice(dto.getPrice());
+		entity.setQuantity(dto.getQuantity());
+		Categories cat = catrepo.getReferenceById(dto.getCategory().getId());
+		entity.setCategory(cat);
+		entity = repo.save(entity);
+		return new ProductCategoryDTO(entity);
+		
 	}
 
 	@Transactional
@@ -54,7 +73,7 @@ public class ProductService {
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
 	}
-
+	
 	@Transactional
 	public void delete(Long id) {
 	

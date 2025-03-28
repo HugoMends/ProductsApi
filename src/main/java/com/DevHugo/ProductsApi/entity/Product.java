@@ -7,10 +7,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Product")
+@Table(name = "tb_product")
 public class Product {
 	
 	@Id
@@ -24,13 +26,18 @@ public class Product {
 	@Column(name = "quantity")
 	private Integer quantity;
 	
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Categories category;
+	
 	public Product() {}
 
-	public Product(Long id, String name, Double price, Integer quantity) {
+	public Product(Long id, String name, Double price, Integer quantity, Categories category) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.quantity = quantity;
+		this.category = category;
 	}
 
 	public Long getId() {
@@ -63,6 +70,15 @@ public class Product {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+	
+
+	public Categories getCategory() {
+		return category;
+	}
+
+	public void setCategory(Categories category) {
+		this.category = category;
 	}
 
 	@Override
